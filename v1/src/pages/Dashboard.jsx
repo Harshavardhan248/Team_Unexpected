@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Button, // Import Button here
 } from "@mui/material";
 import GenderDistribution from "../components/charts/GenderDistribution";
 import DepartmentBarChart from "../components/charts/DepartmentBarChart";
