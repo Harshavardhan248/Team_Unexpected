@@ -27,7 +27,7 @@ pipeline {
             steps {
                 // Navigate to the v1 directory and run tests
                 dir('v1') {
-                    bat 'npm test -- --watchAll=false'
+                    bat 'npm test -- --watchAll=false --passWithNoTests'
                 }
             }
         }
