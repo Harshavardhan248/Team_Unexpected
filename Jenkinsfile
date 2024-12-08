@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = 'C:/Program Files/Java/jdk-17' // Adjust this path based on your Java installation
-        MAVEN_HOME = 'C:/Program Files/apache-maven-3.9.9' // Adjust this path based on your Maven installation
+        JAVA_HOME = 'C:/Program Files/Java/jdk-17' // Adjust based on your Java installation
+        MAVEN_HOME = 'C:/Program Files/apache-maven-3.9.9' // Path to Maven installation
         PATH = "${MAVEN_HOME}/bin;${JAVA_HOME}/bin;${env.PATH}"
     }
 
@@ -17,17 +17,9 @@ pipeline {
 
         stage('Setup') {
             steps {
-                echo 'Setting up environment...'
-                script {
-                    def pomPath = 'HRportal/pom.xml'
-                    if (fileExists(pomPath)) {
-                        echo 'Java Maven project detected. Installing dependencies...'
-                        dir('TeamUnexpected/HRportal') {
-                            bat '"%MAVEN_HOME%/bin/mvn" clean install'
-                        }
-                    } else {
-                        error "No Maven POM file found at ${pomPath}. Ensure the project is set up correctly."
-                    }
+                echo 'Setting up environment and installing dependencies...'
+                dir('HRportal') { // Navigate to HRportal directory where pom.xml is located
+                    bat '"C:/Program Files/apache-maven-3.9.9/bin/mvn" clean install'
                 }
             }
         }
@@ -35,8 +27,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                dir('HRportal') {
-                    bat '"%MAVEN_HOME%/bin/mvn" package'
+                dir('HRportal') { // Navigate to HRportal directory
+                    bat '"C:/Program Files/apache-maven-3.9.9/bin/mvn" package'
                 }
             }
         }
@@ -44,12 +36,24 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                dir('HRportal') {
-                    bat '"%MAVEN_HOME%/bin/mvn" test'
+                dir('HRportal') { // Navigate to HRportal directory
+                    bat '"C:/Program Files/apache-maven-3.9.9/bin/mvn" test'
                 }
             }
         }
 
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo 'Deploying the application...'
+                dir('HRportal') {
+                    // Add deployment commands if needed
+                    bat 'echo Deployment script would go here'
+                }
+            }
+        }
     }
 
     post {
