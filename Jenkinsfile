@@ -2,70 +2,50 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = 'C:/Program Files/Java/jdk-17' // Adjust based on your Java installation
-        MAVEN_HOME = 'C:/Program Files/apache-maven-3.9.9' // Path to Maven installation
-        PATH = "${MAVEN_HOME}/bin;${JAVA_HOME}/bin;${env.PATH}"
+        NODE_HOME = 'C:\\Program Files\\nodejs'
+        PATH = "${NODE_HOME};${env.PATH}"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out the repository...'
-                checkout scm
+                // Checkout the code from the repository
+                git url: 'https://github.com/Harshavardhan248/Team_Unexpected', branch: 'main'
             }
         }
 
-        stage('Setup') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Setting up environment and installing dependencies...'
-                dir('HRportal') { // Navigate to HRportal directory where pom.xml is located
-                    bat '"C:/Program Files/apache-maven-3.9.9/bin/mvn" clean install'
-                }
+                // Install project dependencies
+                bat 'npm install'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                // Run the tests
+                bat 'npm test -- --watchAll=false'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                dir('HRportal') { // Navigate to HRportal directory
-                    bat '"C:/Program Files/apache-maven-3.9.9/bin/mvn" package'
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                dir('HRportal') { // Navigate to HRportal directory
-                    bat '"C:/Program Files/apache-maven-3.9.9/bin/mvn" test'
-                }
-            }
-        }
-
-        stage('Deploy') {
-            when {
-                branch 'main'
-            }
-            steps {
-                echo 'Deploying the application...'
-                dir('HRportal') {
-                    // Add deployment commands if needed
-                    bat 'echo Deployment script would go here'
-                }
+                // Build the project
+                bat 'npm run build'
             }
         }
     }
 
     post {
+        always {
+            // Archive build artifacts if needed
+            archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+        }
         success {
-            echo 'Build and tests succeeded!'
+            echo 'Build and tests were successful!'
         }
         failure {
-            echo 'Build or tests failed!'
-        }
-        always {
-            echo 'Cleaning up workspace...'
-            cleanWs()
+            echo 'Something went wrong. Please check the logs!'
         }
     }
 }
