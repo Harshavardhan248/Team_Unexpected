@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         JAVA_HOME = 'C:/Program Files/Java/jdk-17' // Adjust this path based on your Java installation
-        PATH = "${JAVA_HOME}\\bin;${env.PATH}"
+        MAVEN_HOME = 'C:/Program Files/apache-maven-3.9.9' // Adjust this path based on your Maven installation
+        PATH = "${MAVEN_HOME}/bin;${JAVA_HOME}/bin;${env.PATH}"
     }
 
     stages {
@@ -18,11 +19,11 @@ pipeline {
             steps {
                 echo 'Setting up environment...'
                 script {
-                    def pomPath = 'HRportal/pom.xml'
+                    def pomPath = 'TeamUnexpected/HRportal/pom.xml'
                     if (fileExists(pomPath)) {
                         echo 'Java Maven project detected. Installing dependencies...'
                         dir('TeamUnexpected/HRportal') {
-                            bat 'mvn clean install'
+                            bat '"%MAVEN_HOME%/bin/mvn" clean install'
                         }
                     } else {
                         error "No Maven POM file found at ${pomPath}. Ensure the project is set up correctly."
@@ -35,7 +36,7 @@ pipeline {
             steps {
                 echo 'Building the project...'
                 dir('TeamUnexpected/HRportal') {
-                    bat 'mvn package'
+                    bat '"%MAVEN_HOME%/bin/mvn" package'
                 }
             }
         }
@@ -44,7 +45,7 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 dir('TeamUnexpected/HRportal') {
-                    bat 'mvn test'
+                    bat '"%MAVEN_HOME%/bin/mvn" test'
                 }
             }
         }
