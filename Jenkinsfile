@@ -27,16 +27,7 @@ pipeline {
             steps {
                 // Navigate to the v1 directory and run tests
                 dir('v1') {
-                    bat 'npm test -- --watchAll=false --passWithNoTests'
-                }
-            }
-        }
-
-        stage('Build') {
-            steps {
-                // Navigate to the v1 directory and build the project
-                dir('v1') {
-                    bat 'npm run build'
+                    bat 'npm test -- --watchAll=false'
                 }
             }
         }
@@ -44,16 +35,16 @@ pipeline {
 
     post {
         always {
-            // Archive build artifacts if needed
+            // Archive test reports if needed
             dir('v1') {
-                archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'npm-debug.log', allowEmptyArchive: true
             }
         }
         success {
-            echo 'Build and tests were successful!'
+            echo 'Tests executed successfully!'
         }
         failure {
-            echo 'Something went wrong. Please check the logs!'
+            echo 'Tests failed. Please check the logs!'
         }
     }
 }
