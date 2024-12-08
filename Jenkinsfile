@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = 'C:/Program Files/Java/jdk-17' // Adjust this path based on your Jenkins setup
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+        JAVA_HOME = 'C:\\Program Files\\Java\\jdk-17' // Adjust this path based on your Java installation
+        PATH = "${JAVA_HOME}\\bin;${env.PATH}"
     }
 
     stages {
@@ -18,12 +18,14 @@ pipeline {
             steps {
                 echo 'Setting up environment...'
                 script {
-                    def pomPath = 'HRportal/pom.xml'
+                    def pomPath = 'TeamUnexpected/HRportal/pom.xml'
                     if (fileExists(pomPath)) {
                         echo 'Java Maven project detected. Installing dependencies...'
-                        sh 'mvn clean install'
+                        dir('TeamUnexpected/HRportal') {
+                            bat 'mvn clean install'
+                        }
                     } else {
-                        error 'No Maven POM file found. Ensure the project is set up correctly.'
+                        error "No Maven POM file found at ${pomPath}. Ensure the project is set up correctly."
                     }
                 }
             }
@@ -32,14 +34,18 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                sh 'mvn package'
+                dir('TeamUnexpected/HRportal') {
+                    bat 'mvn package'
+                }
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                sh 'mvn test'
+                dir('TeamUnexpected/HRportal') {
+                    bat 'mvn test'
+                }
             }
         }
 
@@ -49,8 +55,10 @@ pipeline {
             }
             steps {
                 echo 'Deploying the application...'
-                // Add your deployment commands here
-                sh 'echo Deployment script would go here'
+                dir('TeamUnexpected/HRportal') {
+                    // Add deployment commands here
+                    bat 'echo Deployment script would go here'
+                }
             }
         }
     }
