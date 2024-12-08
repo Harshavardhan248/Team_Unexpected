@@ -1,0 +1,35 @@
+/* Styles for Charts */
+
+.chart-container {
+    margin-bottom: 20px;
+  }
+  
+  .chart-container h6 {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .linear-progress-bar {
+    margin-bottom: 10px;
+    height: 10px;
+    border-radius: 5px;
+  }
+  
+  .bar-chart {
+    display: flex;
+    align-items: center;
+  }
+  
+  .bar-chart-bar {
+    height: 20px;
+    margin-right: 10px;
+    text-align: center;
+    color: white;
+    line-height: 20px;
+    border-radius: 5px;
+  }
+  
+  .bar-chart-label {
+    font-size: 0.9rem;
+  }
+  
