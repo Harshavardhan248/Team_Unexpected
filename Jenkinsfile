@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = 'C:\\Program Files\\Java\\jdk-17' // Adjust this path based on your Java installation
+        JAVA_HOME = 'C:/Program Files/Java/jdk-17' // Adjust this path based on your Java installation
         PATH = "${JAVA_HOME}\\bin;${env.PATH}"
     }
 
@@ -18,7 +18,7 @@ pipeline {
             steps {
                 echo 'Setting up environment...'
                 script {
-                    def pomPath = 'TeamUnexpected/HRportal/pom.xml'
+                    def pomPath = 'HRportal/pom.xml'
                     if (fileExists(pomPath)) {
                         echo 'Java Maven project detected. Installing dependencies...'
                         dir('TeamUnexpected/HRportal') {
