@@ -19,7 +19,7 @@ pipeline {
             steps {
                 echo 'Setting up environment...'
                 script {
-                    def pomPath = '/HRportal/pom.xml'
+                    def pomPath = 'HRportal/pom.xml'
                     if (fileExists(pomPath)) {
                         echo 'Java Maven project detected. Installing dependencies...'
                         dir('TeamUnexpected/HRportal') {
@@ -35,7 +35,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                dir('TeamUnexpected/HRportal') {
+                dir('HRportal') {
                     bat '"%MAVEN_HOME%/bin/mvn" package'
                 }
             }
@@ -44,24 +44,12 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                dir('TeamUnexpected/HRportal') {
+                dir('HRportal') {
                     bat '"%MAVEN_HOME%/bin/mvn" test'
                 }
             }
         }
 
-        stage('Deploy') {
-            when {
-                branch 'main'
-            }
-            steps {
-                echo 'Deploying the application...'
-                dir('TeamUnexpected/HRportal') {
-                    // Add deployment commands here
-                    bat 'echo Deployment script would go here'
-                }
-            }
-        }
     }
 
     post {
