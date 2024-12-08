@@ -16,22 +16,28 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Install project dependencies
-                bat 'npm install'
+                // Navigate to the v1 directory and install dependencies
+                dir('v1') {
+                    bat 'npm install'
+                }
             }
         }
 
         stage('Run Tests') {
             steps {
-                // Run the tests
-                bat 'npm test -- --watchAll=false'
+                // Navigate to the v1 directory and run tests
+                dir('v1') {
+                    bat 'npm test -- --watchAll=false'
+                }
             }
         }
 
         stage('Build') {
             steps {
-                // Build the project
-                bat 'npm run build'
+                // Navigate to the v1 directory and build the project
+                dir('v1') {
+                    bat 'npm run build'
+                }
             }
         }
     }
@@ -39,7 +45,9 @@ pipeline {
     post {
         always {
             // Archive build artifacts if needed
-            archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+            dir('v1') {
+                archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
+            }
         }
         success {
             echo 'Build and tests were successful!'
