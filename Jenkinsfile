@@ -18,7 +18,7 @@ pipeline {
             steps {
                 echo 'Setting up environment...'
                 script {
-                    def pomPath = '/HRportal/pom.xml'
+                    def pomPath = 'HRportal/pom.xml'
                     if (fileExists(pomPath)) {
                         echo 'Java Maven project detected. Installing dependencies...'
                         sh 'mvn clean install'
