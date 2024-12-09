@@ -16,8 +16,8 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Navigate to the v1 directory and install dependencies
-                dir('v1') {
+              
+                dir('./') {
                     bat 'npm install'
                 }
             }
@@ -25,9 +25,9 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                // Navigate to the v1 directory and run tests
-                dir('v1') {
-                    bat 'npm test -- --watchAll=false --passWithNoTests'
+            
+                dir('./') {
+                    bat 'npm test -- --watchAll=false'
                 }
             }
         }
@@ -35,8 +35,8 @@ pipeline {
 
     post {
         always {
-            // Archive test reports if needed
-            dir('v1') {
+ 
+            dir('./') {
                 archiveArtifacts artifacts: 'npm-debug.log', allowEmptyArchive: true
             }
         }
