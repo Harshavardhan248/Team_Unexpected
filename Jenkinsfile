@@ -27,7 +27,7 @@ pipeline {
             steps {
             
                 dir('./') {
-                    bat 'npm test -- --watchAll=false'
+                    bat 'npm test'
                 }
             }
         }
